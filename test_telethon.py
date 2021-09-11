@@ -4,6 +4,15 @@ import numpy as np
 import logging
 from telethon import TelegramClient, events, utils
 from uuid import uuid4
+from datetime import datetime
+from pytz import timezone
+
+def timetz(*args):
+    return datetime.now(tz).timetuple()
+
+tz = timezone('America/Los_Angeles') # UTC, Asia/Shanghai, Europe/Berlin
+
+logging.Formatter.converter = timetz
 
 logging.basicConfig(
     filename='telethon.log',
@@ -63,6 +72,8 @@ async def handle_media(event):
 async def handle_text(event):
     message_text = event.text.lower()
     if 'not available' in message_text:
+        return
+    elif 'unavailable' in message_text:
         return
     elif '?' in message_text:
         return
